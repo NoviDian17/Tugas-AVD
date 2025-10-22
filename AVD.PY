@@ -28,18 +28,18 @@ df[num_cols] = df[num_cols].fillna(df[num_cols].median())
 cat_cols = df.select_dtypes(include=['object']).columns
 df[cat_cols] = df[cat_cols].fillna(df[cat_cols].mode().iloc[0])
 
-# Setelah diisi, tampilkan info null lagi
+# Cek kembali setelah pengisian
 print("===== Setelah Penanganan Null Values =====")
 print(df.isnull().sum().sort_values(ascending=False).head(10), "\n")
 
 # --- 5. Hapus data duplikat (jika ada) ---
 df.drop_duplicates(inplace=True)
 
-# --- 6. Ubah teks jadi lowercase untuk kolom tertentu (opsional) ---
+# --- 6. Ubah teks jadi lowercase untuk kolom tertentu ---
 if 'Neighborhood' in df.columns:
     df['Neighborhood'] = df['Neighborhood'].str.lower()
 
-# --- 7. Statistika Deskriptif (Mean, Median, Modus, Varian, Standar Deviasi) ---
+# --- 7. Statistika Deskriptif (Mean, Median, Modus, Varian, Std Deviasi) ---
 print("===== Statistika Deskriptif (SalePrice) =====")
 mean_val = df['SalePrice'].mean()
 median_val = df['SalePrice'].median()
@@ -83,6 +83,17 @@ plt.title("Boxplot - Deteksi Outlier pada SalePrice")
 plt.ylabel("Sale Price")
 plt.show()
 
-# --- 10. Simpan dataset bersih ---
+# --- 10. Visualisasi Bar Chart (contoh: jumlah rumah per Neighborhood) ---
+if 'Neighborhood' in df.columns:
+    plt.figure(figsize=(10,5))
+    df['Neighborhood'].value_counts().head(10).plot(kind='bar', color='skyblue')
+    plt.title("Jumlah Rumah per Neighborhood (10 Terbanyak)")
+    plt.xlabel("Neighborhood")
+    plt.ylabel("Jumlah Rumah")
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.show()
+
+# --- 11. Simpan dataset bersih ---
 df.to_csv(r"C:\Users\user\Downloads\AmesHousing_Cleaned.csv", index=False)
 print("\nDataset bersih telah disimpan sebagai 'AmesHousing_Cleaned.csv'")
